@@ -29,6 +29,7 @@ final class PaywallViewController: UIViewController {
     private let activityIndicator = UIActivityIndicatorView(style: .large)
     private let indicatorBackgroundView = UIView()
     private let indicatorBackground = UIView()
+    private let pw1ImageView = UIImageView(image: UIImage(named: "pw1"))
 
     struct SubscriptionOption {
         let product: ApphudProduct
@@ -113,7 +114,7 @@ final class PaywallViewController: UIViewController {
         view.addSubview(scrollView)
         scrollView.snp.makeConstraints {
             $0.leading.trailing.equalToSuperview()
-            $0.top.equalToSuperview().offset(50)
+            $0.top.equalTo(view.safeAreaLayoutGuide).offset(-24)
             $0.bottom.equalTo(continueButton.snp.top).offset(-16)
         }
         scrollView.addSubview(contentView)
@@ -123,9 +124,9 @@ final class PaywallViewController: UIViewController {
         }
 
         // --- PW1, PW2, black overlay and feature stack ---
-        let pw1ImageView = UIImageView(image: UIImage(named: "pw1"))
         pw1ImageView.contentMode = .scaleAspectFill
         pw1ImageView.isUserInteractionEnabled = true
+        pw1ImageView.clipsToBounds = true
         contentView.addSubview(pw1ImageView)
         pw1ImageView.snp.makeConstraints {
             $0.top.equalToSuperview().offset(16)
@@ -150,7 +151,7 @@ final class PaywallViewController: UIViewController {
         blackOverlayView.snp.makeConstraints {
             $0.top.equalTo(pw1ImageView.snp.bottom).offset(-55)
 //            $0.centerX.equalTo(pw1ImageView)
-            $0.leading.trailing.equalToSuperview().inset(8)
+            $0.leading.trailing.equalToSuperview().inset(16)
         }
 
         let features = [
@@ -463,5 +464,13 @@ final class PaywallViewController: UIViewController {
         }
     }
 
+}
+
+// MARK: - Corner radius for pw1ImageView after layout
+extension PaywallViewController {
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        pw1ImageView.layer.cornerRadius = 24
+    }
 }
  
