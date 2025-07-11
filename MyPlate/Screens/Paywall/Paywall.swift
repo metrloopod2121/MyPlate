@@ -16,19 +16,10 @@ final class PaywallViewController: UIViewController {
 
     // MARK: - UI Utilities & Layout
 
-    private func createLabel(font: UIFont, color: UIColor, alignment: NSTextAlignment = .left, lines: Int = 1) -> UILabel {
-        let label = UILabel()
-        label.font = font
-        label.textColor = color
-        label.textAlignment = alignment
-        label.numberOfLines = lines
-        return label
-    }
 
     private enum Layout {
         static let sideInset: CGFloat = 16
         static let buttonHeight: CGFloat = 72
-        static let buttonWidth: CGFloat = 358
     }
     
     private let yearTitleLabel = UILabel()
@@ -53,7 +44,6 @@ final class PaywallViewController: UIViewController {
     private var products: [ApphudProduct] = []
     private var paywall: ApphudPaywall?
     private var isYearSelected = true
-    private var isMonthSelected = false
     private var yearOption: SubscriptionOption?
     private var monthOption: SubscriptionOption?
     var onClose: (() -> Void)?
@@ -64,7 +54,6 @@ final class PaywallViewController: UIViewController {
     private let termsButton = UIButton(type: .system)
     private let yearButton = UIButton()
     private let monthButton = UIButton()
-    private let cancelInfoButton = UIButton()
     let discountBadge = UILabel()
     
     override func viewDidLoad() {
@@ -104,19 +93,47 @@ final class PaywallViewController: UIViewController {
         activityIndicator.snp.makeConstraints {
             $0.center.equalToSuperview()
         }
+        
+        // continueButton
+        continueButton.setTitle("Continue", for: .normal)
+        continueButton.titleLabel?.font = Fonts.font(size: 16, weight: .regular)
+        continueButton.backgroundColor = Colors.orange
+        continueButton.layer.cornerRadius = 16
+        continueButton.addTarget(self, action: #selector(didTapContinue), for: .touchUpInside)
+        view.addSubview(continueButton)
+        continueButton.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview().inset(Layout.sideInset)
+            $0.bottom.equalToSuperview().inset(42)
+            $0.height.equalTo(50)
+        }
+
+        // --- ScrollView and contentView ---
+        let scrollView = UIScrollView()
+        let contentView = UIView()
+        view.addSubview(scrollView)
+        scrollView.snp.makeConstraints {
+            $0.leading.trailing.equalToSuperview()
+            $0.top.equalToSuperview().offset(50)
+            $0.bottom.equalTo(continueButton.snp.top).offset(-16)
+        }
+        scrollView.addSubview(contentView)
+        contentView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+            $0.width.equalToSuperview()
+        }
 
         // --- PW1, PW2, black overlay and feature stack ---
         let pw1ImageView = UIImageView(image: UIImage(named: "pw1"))
         pw1ImageView.contentMode = .scaleAspectFill
         pw1ImageView.isUserInteractionEnabled = true
-        view.addSubview(pw1ImageView)
+        contentView.addSubview(pw1ImageView)
         pw1ImageView.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(70)
+            $0.top.equalToSuperview().offset(16)
             $0.leading.trailing.equalToSuperview().inset(16)
         }
 
         let pw2ImageView = UIImageView(image: UIImage(named: "pw2"))
-        pw2ImageView.contentMode = .scaleAspectFit
+        pw2ImageView.contentMode = .scaleAspectFill
         pw1ImageView.addSubview(pw2ImageView)
         pw2ImageView.snp.makeConstraints {
             $0.centerX.equalToSuperview().offset(-10)
@@ -129,10 +146,11 @@ final class PaywallViewController: UIViewController {
         blackOverlayView.backgroundColor = Colors.darkGray
         blackOverlayView.layer.cornerRadius = 16
         blackOverlayView.clipsToBounds = true
-        view.addSubview(blackOverlayView)
+        contentView.addSubview(blackOverlayView)
         blackOverlayView.snp.makeConstraints {
-            $0.top.equalTo(pw1ImageView.snp.bottom).offset(-35)
-            $0.leading.trailing.equalTo(pw1ImageView)
+            $0.top.equalTo(pw1ImageView.snp.bottom).offset(-55)
+//            $0.centerX.equalTo(pw1ImageView)
+            $0.leading.trailing.equalToSuperview().inset(8)
         }
 
         let features = [
@@ -167,29 +185,30 @@ final class PaywallViewController: UIViewController {
             $0.leading.equalTo(pw1ImageView).offset(16)
             $0.size.equalTo(24)
         }
-        
-        continueButton.setTitle("Continue", for: .normal)
-        continueButton.titleLabel?.font = Fonts.font(size: 16, weight: .regular)
-        continueButton.backgroundColor = Colors.orange
-        continueButton.layer.cornerRadius = 16
-        continueButton.addTarget(self, action: #selector(didTapContinue), for: .touchUpInside)
-        view.addSubview(continueButton)
-        continueButton.snp.makeConstraints {
-            $0.leading.trailing.equalToSuperview().inset(Layout.sideInset)
-            $0.bottom.equalToSuperview().inset(76)
-            $0.height.equalTo(50)
-        }
 
-        
         // monthButton and yearButton with border (not background image)
         monthButton.setBackgroundImage(nil, for: .normal)
         monthButton.layer.cornerRadius = 16
         monthButton.layer.borderWidth = 1
         monthButton.layer.borderColor = UIColor(red: 176/255, green: 176/255, blue: 176/255, alpha: 1).cgColor
         monthButton.addTarget(self, action: #selector(monthTapped), for: .touchUpInside)
-        view.addSubview(monthButton)
-        monthButton.snp.makeConstraints {
-            $0.bottom.equalTo(continueButton.snp.top).offset(-56)
+        contentView.addSubview(monthButton)
+
+        yearButton.setBackgroundImage(nil, for: .normal)
+        yearButton.layer.cornerRadius = 16
+        yearButton.layer.borderWidth = 1
+        yearButton.layer.borderColor = Colors.orange.cgColor
+        yearButton.addTarget(self, action: #selector(yearTapped), for: .touchUpInside)
+        contentView.addSubview(yearButton)
+
+        // --- Tariff buttons constraints: yearButton below blackOverlayView, monthButton below yearButton ---
+        yearButton.snp.remakeConstraints {
+            $0.top.equalTo(blackOverlayView.snp.bottom).offset(24)
+            $0.leading.trailing.equalToSuperview().inset(Layout.sideInset)
+            $0.height.equalTo(Layout.buttonHeight)
+        }
+        monthButton.snp.remakeConstraints {
+            $0.top.equalTo(yearButton.snp.bottom).offset(10)
             $0.leading.trailing.equalToSuperview().inset(Layout.sideInset)
             $0.height.equalTo(Layout.buttonHeight)
         }
@@ -199,18 +218,6 @@ final class PaywallViewController: UIViewController {
         monthTitleLabel.snp.makeConstraints {
             $0.leading.equalToSuperview().offset(20)
             $0.centerY.equalToSuperview()
-        }
-
-        yearButton.setBackgroundImage(nil, for: .normal)
-        yearButton.layer.cornerRadius = 16
-        yearButton.layer.borderWidth = 1
-        yearButton.layer.borderColor = Colors.orange.cgColor
-        yearButton.addTarget(self, action: #selector(yearTapped), for: .touchUpInside)
-        view.addSubview(yearButton)
-        yearButton.snp.makeConstraints {
-            $0.bottom.equalTo(monthButton.snp.top).offset(-10)
-            $0.leading.trailing.equalToSuperview().inset(Layout.sideInset)
-            $0.height.equalTo(Layout.buttonHeight)
         }
 
         yearTitleLabel.textAlignment = .left
@@ -243,13 +250,18 @@ final class PaywallViewController: UIViewController {
             $0.centerY.equalToSuperview().offset(12)
         }
 
+        // --- Ensure contentView's bottom is below the last button for scrolling ---
+        contentView.snp.makeConstraints {
+            $0.bottom.equalTo(monthButton).offset(32)
+        }
 
-
-
-
-        let cancelInfoLabel = createLabel(font: Fonts.font(size: 12, weight: .regular), color: Colors.gray, alignment: .center)
+        // cancelInfoLabel and cancelIcon
+        let cancelInfoLabel = UILabel()
+        cancelInfoLabel.font = Fonts.font(size: 12, weight: .regular)
+        cancelInfoLabel.textColor = Colors.gray
+        cancelInfoLabel.textAlignment = .center
         cancelInfoLabel.text = "Cancel Anytime"
-        
+
         let cancelIcon = UIImageView(image: UIImage(named: "cancel"))
         view.addSubview(cancelIcon)
         view.addSubview(cancelInfoLabel)
@@ -263,6 +275,9 @@ final class PaywallViewController: UIViewController {
             $0.bottom.equalTo(continueButton.snp.top).offset(-12)
         }
 
+      
+
+        // privacy, restore, terms buttons
         privacyButton.setTitle("Privacy Policy", for: .normal)
         privacyButton.setTitleColor(Colors.gray, for: .normal)
         privacyButton.titleLabel?.font = Fonts.font(size: 11, weight: .regular)
@@ -281,19 +296,21 @@ final class PaywallViewController: UIViewController {
         termsButton.addTarget(self, action: #selector(openTerms), for: .touchUpInside)
         view.addSubview(termsButton)
 
-        privacyButton.snp.makeConstraints {
+        let bottomOffset: CGFloat = 4
+
+        privacyButton.snp.remakeConstraints {
             $0.leading.equalToSuperview().inset(Layout.sideInset)
-            $0.bottom.equalTo(view.safeAreaLayoutGuide)
+            $0.top.equalTo(continueButton.snp.bottom).offset(bottomOffset)
         }
 
-        restoreButton.snp.makeConstraints {
+        restoreButton.snp.remakeConstraints {
             $0.centerX.equalToSuperview()
-            $0.bottom.equalTo(view.safeAreaLayoutGuide)
+            $0.top.equalTo(continueButton.snp.bottom).offset(bottomOffset)
         }
 
-        termsButton.snp.makeConstraints {
+        termsButton.snp.remakeConstraints {
             $0.trailing.equalToSuperview().inset(Layout.sideInset)
-            $0.bottom.equalTo(view.safeAreaLayoutGuide)
+            $0.top.equalTo(continueButton.snp.bottom).offset(bottomOffset)
         }
 
         // Ensure the indicatorBackgroundView is on top of all subviews
@@ -372,11 +389,11 @@ final class PaywallViewController: UIViewController {
     }
 
     @objc private func yearTapped() { selectPlan(isYear: true) }
+   
     @objc private func monthTapped() { selectPlan(isYear: false) }
 
     private func selectPlan(isYear: Bool) {
         isYearSelected = isYear
-        isMonthSelected = !isYear
         yearButton.setImage(nil, for: .normal)
         monthButton.setImage(nil, for: .normal)
         
@@ -401,7 +418,7 @@ final class PaywallViewController: UIViewController {
 
     @objc private func restorePurchases() {
         showActivity()
-        SwiftHelper.apphudHelper.restoreAllProducts { success in
+        SubscriptionHandler.shared.recoverPurchases { success in
             DispatchQueue.main.async {
                 self.hideActivity()
                 if success {
@@ -439,8 +456,11 @@ final class PaywallViewController: UIViewController {
     }
 
     @objc private func didTapClose() {
-        print("Close pay")
-        onClose?()
+        if let onClose = onClose {
+            onClose()
+        } else {
+            dismiss(animated: true)
+        }
     }
 
 }

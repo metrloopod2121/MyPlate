@@ -87,6 +87,7 @@ final class CustomTabbar: UITabBar {
         for subview in subviews {
             if let className = NSClassFromString("UITabBarButton"), subview.isKind(of: className) {
                 var frame = subview.frame
+                frame.origin.y = backgroundView.frame.midY - frame.height / 2
                 if index == 0 {
                     frame.origin.x = 0
                     frame.size.width = tabBarButtonWidth

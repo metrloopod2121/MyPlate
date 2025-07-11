@@ -65,13 +65,20 @@ final class AccountSettingsViewController: UIViewController {
     }
 
     private func setupViews() {
+        // Add backgroundView below scrollView to ensure stable background color
+        let backgroundView = UIView()
+        backgroundView.backgroundColor = Colors.background
+        view.addSubview(backgroundView)
+        backgroundView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
+
         view.addSubview(scrollView)
         scrollView.backgroundColor = Colors.background
         scrollView.snp.makeConstraints { make in
             make.top.equalTo(view.safeAreaLayoutGuide.snp.top).offset(16)
             make.leading.trailing.equalToSuperview()
-            make.bottom.equalToSuperview().inset(32) // увеличить отступ снизу
-            make.height.greaterThanOrEqualTo(view.safeAreaLayoutGuide.snp.height)
+            make.bottom.equalToSuperview().inset(70)
         }
 
         scrollView.addSubview(contentStack)
@@ -277,7 +284,9 @@ final class AccountSettingsViewController: UIViewController {
     
     @objc private func subscriptionTapped() {
         let paywall = PaywallViewController()
-        navigationController?.pushViewController(paywall, animated: true)
+        let nav = UINavigationController(rootViewController: paywall)
+        nav.modalPresentationStyle = .fullScreen
+        present(nav, animated: true)
     }
 
 

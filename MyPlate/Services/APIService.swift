@@ -13,7 +13,7 @@ import ApphudSDK
 final class APIService {
     static let shared = APIService()
     
-    private let baseURL = "https://api-use-core.store/calories/api/v1"
+    private let baseURL = "https://trust.coreapis.space/calories/api/v1"
     private let appId = "eduard.plate.bundle"
     
     private init() {}
@@ -33,7 +33,7 @@ final class APIService {
             throw NSError(domain: "ImageConversion", code: -1)
         }
         
-        print("Starting upload...")
+        
         let uploadResponse = AF.upload(
             multipartFormData: { multipart in
                 multipart.append(imageData, withName: "image", fileName: "photo.jpg", mimeType: "image/jpeg")

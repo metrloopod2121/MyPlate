@@ -167,11 +167,12 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = ZF746T84S4;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MyPlate/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "YesDiet - Calorie counter";
 				INFOPLIST_KEY_NSCameraUsageDescription = "We need access to your camera to allow you to take a photo of your meal.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "We need access to your photo library to let you select a photo of your meal";
 				INFOPLIST_KEY_NSUserTrackingUsageDescription = "We use your data to provide personalized content and offers that help you stay on track with your goals.";
@@ -185,7 +186,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = eduard.plate.bundle;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
@@ -208,11 +209,12 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 4;
 				DEVELOPMENT_TEAM = "";
 				"DEVELOPMENT_TEAM[sdk=iphoneos*]" = ZF746T84S4;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MyPlate/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "YesDiet - Calorie counter";
 				INFOPLIST_KEY_NSCameraUsageDescription = "We need access to your camera to allow you to take a photo of your meal.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "We need access to your photo library to let you select a photo of your meal";
 				INFOPLIST_KEY_NSUserTrackingUsageDescription = "We use your data to provide personalized content and offers that help you stay on track with your goals.";
@@ -226,7 +228,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.2;
 				PRODUCT_BUNDLE_IDENTIFIER = eduard.plate.bundle;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";

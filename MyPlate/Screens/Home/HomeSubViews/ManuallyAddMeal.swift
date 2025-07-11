@@ -144,8 +144,6 @@ class ManuallyAddMealViewController: UIViewController, UITextViewDelegate {
 
         Task {
             do {
-                let userId = "test"
-                let appId = "eduard.plate.bundle"
                 let meal = try await apiService.analyzeMealText(description: description)
 
                 await MainActor.run {
