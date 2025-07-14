@@ -18,6 +18,8 @@
   ],
   "settings" : {
     "_failTransactionsEnabled" : false,
+    "_locale" : "en_US",
+    "_storefront" : "USA",
     "_storeKitErrors" : [
       {
         "current" : null,
@@ -121,9 +123,9 @@
               "locale" : "en_US"
             }
           ],
-          "productID" : "week_4.99_nottrial",
+          "productID" : "week_4.99_notrrial",
           "recurringSubscriptionPeriod" : "P1W",
-          "referenceName" : "week_4.99_nottrial",
+          "referenceName" : "week_4.99_notrrial",
           "subscriptionGroupID" : "9A8E5611",
           "type" : "RecurringSubscription",
           "winbackOffers" : [
