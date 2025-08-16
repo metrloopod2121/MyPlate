@@ -43,13 +43,16 @@ final class AccountSettingsViewController: UIViewController {
 
         title = "My Account"
         // Add pro_label to navigation bar right only if no active subscription
-        if SubscriptionHandler.shared.hasActiveSubscription {
+        if !SubscriptionHandler.shared.hasActiveSubscription {
             let proLabelImageView = UIImageView(image: UIImage(named: "pro_label"))
             proLabelImageView.contentMode = .scaleAspectFit
+            proLabelImageView.isUserInteractionEnabled = true
             proLabelImageView.snp.makeConstraints { make in
                 make.width.equalTo(70)
                 make.height.equalTo(32)
             }
+            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(proLabelTapped))
+            proLabelImageView.addGestureRecognizer(tapGesture)
             let barButtonItem = UIBarButtonItem(customView: proLabelImageView)
             navigationItem.rightBarButtonItem = barButtonItem
         }
@@ -438,6 +441,13 @@ final class AccountSettingsViewController: UIViewController {
             self?.dismiss(animated: true)
         }
         let nav = UINavigationController(rootViewController: onboarding)
+        nav.modalPresentationStyle = .fullScreen
+        present(nav, animated: true)
+    }
+
+    @objc private func proLabelTapped() {
+        let paywall = PaywallViewController()
+        let nav = UINavigationController(rootViewController: paywall)
         nav.modalPresentationStyle = .fullScreen
         present(nav, animated: true)
     }

@@ -105,10 +105,11 @@ final class CustomTabbar: UITabBar {
         // Проверка подписки перед переходом к добавлению
         if !SubscriptionHandler.shared.hasActiveSubscription {
             let paywall = PaywallViewController()
+            let nav = UINavigationController(rootViewController: paywall)
+            nav.modalPresentationStyle = .fullScreen
             UIApplication.shared.windows.first(where: \.isKeyWindow)?
                 .rootViewController?
-                .navigationController?
-                .pushViewController(paywall, animated: true)
+                .present(nav, animated: true)
             return
         }
         guard let window = UIApplication.shared.windows.first(where: \.isKeyWindow) else { return }
@@ -121,4 +122,3 @@ final class CustomTabbar: UITabBar {
     }
 
 }
-

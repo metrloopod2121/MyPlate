@@ -183,6 +183,9 @@ class CalendarViewController: UIViewController {
         if subscribed {
             proLabelImageView.isHidden = true
             buttonsContainer.isHidden = false
+            proLabelImageView.isUserInteractionEnabled = true
+            let tap = UITapGestureRecognizer(target: self, action: #selector(proLabelTapped))
+            proLabelImageView.addGestureRecognizer(tap)
 
             if let history = dataFlow.loadHistoryArrFromFile() {
                 self.userHistory = history
@@ -198,6 +201,9 @@ class CalendarViewController: UIViewController {
         } else {
             proLabelImageView.isHidden = false
             buttonsContainer.isHidden = true
+            proLabelImageView.isUserInteractionEnabled = true
+            let tap = UITapGestureRecognizer(target: self, action: #selector(proLabelTapped))
+            proLabelImageView.addGestureRecognizer(tap)
         }
     }
 
@@ -368,6 +374,14 @@ class CalendarViewController: UIViewController {
             calendarGridView.addArrangedSubview(rowStack)
         }
     }
+    
+    @objc private func proLabelTapped() {
+        let paywall = PaywallViewController()
+        let nav = UINavigationController(rootViewController: paywall)
+        nav.modalPresentationStyle = .fullScreen
+        present(nav, animated: true)
+    }
+
 
     @objc private func dayButtonTapped(_ sender: UIButton) {
         let day = sender.tag
@@ -388,3 +402,4 @@ class CalendarViewController: UIViewController {
         navigationController?.pushViewController(streakVC, animated: true)
     }
 }
+

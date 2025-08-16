@@ -51,6 +51,8 @@ final class EntryTabBarController: UITabBarController {
         tabBar.barStyle = .black
         tabBar.isTranslucent = false
         tabBar.backgroundColor = Colors.background
+        tabBar.tintColor = .white
+        tabBar.unselectedItemTintColor = .gray
     }
 
     override func tabBar(_ tabBar: UITabBar, didSelect item: UITabBarItem) {

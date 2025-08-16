@@ -16,12 +16,15 @@ final class TrackingViewController: UIViewController {
     private let userButton: UIButton = {
         let button = UIButton(type: .system)
         button.backgroundColor = .white
-        button.layer.cornerRadius = 16
+        button.layer.cornerRadius = 20
         button.clipsToBounds = true
         button.setImage(UIImage(named: "user_icon"), for: .normal)
         button.tintColor = .black
         button.imageView?.contentMode = .scaleAspectFit
-        button.imageEdgeInsets = UIEdgeInsets(top: 4, left: 4, bottom: 4, right: 4)
+        button.imageEdgeInsets = UIEdgeInsets(top: 6, left: 6, bottom: 6, right: 6)
+        button.snp.makeConstraints { make in
+            make.width.height.equalTo(40)
+        }
         return button
     }()
 
@@ -98,8 +101,8 @@ final class TrackingViewController: UIViewController {
     }
 
     @objc private func userButtonTapped() {
-        print("User button tapped")
-        // Добавь здесь логику перехода в профиль
+        let vc = AccountSettingsViewController()
+        navigationController?.pushViewController(vc, animated: true)
     }
 
     private func updateStreak() {

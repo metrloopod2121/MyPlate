@@ -73,14 +73,17 @@ class WeightControlViewController: UIViewController {
         headerLabel.font = Fonts.font(size: 34, weight: .bold)
         headerLabel.textAlignment = .left
         headerLabel.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(62)
+            make.top.equalTo(view.safeAreaLayoutGuide)
             make.left.right.equalToSuperview().inset(24)
         }
 
         // PRO label (show if subscription is absent)
-        if SubscriptionHandler.shared.hasActiveSubscription {
+        if !SubscriptionHandler.shared.hasActiveSubscription {
             let proLabelImageView = UIImageView(image: UIImage(named: "pro_label"))
             proLabelImageView.contentMode = .scaleAspectFit
+            proLabelImageView.isUserInteractionEnabled = true
+            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(proLabelTapped))
+            proLabelImageView.addGestureRecognizer(tapGesture)
             view.addSubview(proLabelImageView)
             proLabelImageView.snp.makeConstraints { make in
                 make.centerY.equalTo(headerLabel)
@@ -293,12 +296,23 @@ class WeightControlViewController: UIViewController {
         weightChartView.legend.enabled = false
         weightChartView.animate(xAxisDuration: 1.0)
     }
+    
+    @objc private func proLabelTapped() {
+        print("pro")
+        let paywall = PaywallViewController()
+        let nav = UINavigationController(rootViewController: paywall)
+        nav.modalPresentationStyle = .fullScreen
+        present(nav, animated: true)
+    }
+
 
     @objc private func addButtonTapped() {
         // Проверка на подписку
         if !SubscriptionHandler.shared.hasActiveSubscription {
             let paywall = PaywallViewController()
-            navigationController?.pushViewController(paywall, animated: true)
+            let nav = UINavigationController(rootViewController: paywall)
+            nav.modalPresentationStyle = .fullScreen
+            present(nav, animated: true)
             return
         }
         if goalAchieved {
@@ -540,4 +554,5 @@ extension WeightControlViewController: WeightAddViewControllerDelegate {
         }
     }
 }
+
 
